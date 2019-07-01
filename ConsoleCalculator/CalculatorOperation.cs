@@ -18,50 +18,21 @@ namespace ConsoleCalculator
         {
             if(digits.Contains(key.ToString()))
             {
-                if(hasProcesed)
-                {
-                    if(IsValidDigit(operand1, key))                     
-                        operand1 += key;
-                }
-                else
-                {
-                    if(IsValidDigit(operand2, key))
-                        operand2 += key;
-                }
+                FormDigit(key);
             } 
             else if(operators.Contains(key.ToString()))
             {
-                if(_operator == null)
-                    _operator = key;
-                if(hasProcesed)
-                {
-                    hasProcesed = false;
-                }
-                else
-                {
-                    operand1 = CalculateResult(operand1, operand2, _operator);
-                    operand2 = "0";
-                    if(_operator != null) _operator = key;
-                }
+                ActionOnOperator(key);
             }
 
             else if(key == 'C' || key == 'c')
             {
-                operand1 = "0";
-                operand2 = "0";
-                hasProcesed = true;
+                ClearConsole();
             }
 
             else if(key == 's' || key == 'S')
             {
-                if(hasProcesed)
-                {
-                    operand1 = $"{(Double.Parse(operand1) * -1)}";
-                }
-                else
-                {
-                    operand2 = $"{(Double.Parse(operand2) * -1)}";
-                }
+                ToggleSign(key);
             }
             else if(key == '=')
             {
@@ -74,6 +45,54 @@ namespace ConsoleCalculator
             return operand1;   
         }
 
+        private void ClearConsole()
+        {
+            operand1 = "0";
+            operand2 = "0";
+            hasProcesed = true;
+        }
+
+        private void FormDigit(char key)
+        {
+            if(hasProcesed)
+            {
+                if(IsValidDigit(operand1, key))                     
+                    operand1 += key;
+            }
+            else
+            {
+                if(IsValidDigit(operand2, key))
+                    operand2 += key;
+            }
+        }
+
+        private void ActionOnOperator(char key)
+        {
+            if(_operator == null)
+                _operator = key;
+            if(hasProcesed)
+            {
+                hasProcesed = false;
+            }
+            else
+            {
+                operand1 = CalculateResult(operand1, operand2, _operator);
+                operand2 = "0";
+                if(_operator != null) _operator = key;
+            }
+        }
+
+        private void ToggleSign(char key)
+        {
+            if(hasProcesed)
+            {
+                operand1 = $"{(Double.Parse(operand1) * -1)}";
+            }
+            else
+            {
+                operand2 = $"{(Double.Parse(operand2) * -1)}";
+            }
+        }
         private string CalculateResult(string operand1, string operand2, char? @operator)
         {
             double number1 = double.Parse(operand1);
@@ -99,8 +118,6 @@ namespace ConsoleCalculator
                 default:
                     return "0";
             }
-            
-            throw new NotImplementedException();
         }
 
         private bool IsValidDigit(string number, char key)

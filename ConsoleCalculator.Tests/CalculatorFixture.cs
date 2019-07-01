@@ -91,7 +91,7 @@ namespace ConsoleCalculator.Tests
         }
 
         [Fact]
-        public void TestC()
+        public void TestCLearConsole()
         {
             //7+4 clear 6
             calculator.SendKeyPress('7');
@@ -110,7 +110,7 @@ namespace ConsoleCalculator.Tests
             calculator.SendKeyPress('+');
             calculator.SendKeyPress('4');
             calculator.SendKeyPress('s');
-            Assert.Equal("3", calculator.SendKeyPress('='));
+            Assert.Equal("-11", calculator.SendKeyPress('='));
         }
 
         [Fact]

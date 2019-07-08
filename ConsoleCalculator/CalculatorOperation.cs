@@ -10,41 +10,36 @@ namespace ConsoleCalculator
         private char? _operator = null;
         private string digits = "1234567890.";
         private string operators = "+-/xX";
-        private string result = "0";
 
         private const string Error = "-E-";
 
         public string PerformOperation(char key)
         {
-            if(digits.Contains(key.ToString()))
-            {
-                FormDigit(key);
-            } 
-            else if(operators.Contains(key.ToString()))
-            {
+
+            if (digits.Contains(key.ToString()))
+                _HandleDigit(key);
+
+            else if (operators.Contains(key.ToString()))
                 ActionOnOperator(key);
-            }
 
-            else if(key == 'C' || key == 'c')
-            {
+            else if (key == 'C' || key == 'c')
                 ClearConsole();
-            }
 
-            else if(key == 's' || key == 'S')
-            {
+            else if (key == 's' || key == 'S')
                 ToggleSign(key);
-            }
-            else if(key == '=')
+
+            else if (key == '=')
             {
-                if(_operator != null && operators.Contains(_operator.ToString()))
+                if (_operator != null && operators.Contains(_operator.ToString()))
                 {
-                    operand1 = CalculateResult(operand1, operand2, _operator);
-                };
+                    operand1 = DisplayResult(operand1, operand2, _operator);
+                }
                 operand2 = "0";
             }
             return operand1;   
         }
 
+        /*Clear the console screen*/
         private void ClearConsole()
         {
             operand1 = "0";
@@ -52,7 +47,12 @@ namespace ConsoleCalculator
             hasProcesed = true;
         }
 
-        private void FormDigit(char key)
+        /*
+         _HandleDigit takes input from user and form the number.
+         First it form operand1 and set flag hasProssed false
+         after it will form operand2.
+        */
+        private void _HandleDigit(char key)
         {
             if(hasProcesed)
             {
@@ -66,6 +66,10 @@ namespace ConsoleCalculator
             }
         }
 
+        /*
+         ActionOnOperator takes input and set to the _operator 
+         if _operator is already set then calculate the result
+        */
         private void ActionOnOperator(char key)
         {
             if(_operator == null)
@@ -76,12 +80,19 @@ namespace ConsoleCalculator
             }
             else
             {
-                operand1 = CalculateResult(operand1, operand2, _operator);
+                operand1 = DisplayResult(operand1, operand2, _operator);
                 operand2 = "0";
                 if(_operator != null) _operator = key;
             }
         }
 
+        /* Calculate the final output */
+        private string DisplayResult(string operand1, string operand2, char? @operator)
+        {
+            return CalculatorOpearationHelper.CalculateResult(operand1, operand2, @operator);
+        }
+
+        /* ToggleSign function toggle the sign of console output */
         private void ToggleSign(char key)
         {
             if(hasProcesed)
@@ -93,33 +104,9 @@ namespace ConsoleCalculator
                 operand2 = $"{(Double.Parse(operand2) * -1)}";
             }
         }
-        private string CalculateResult(string operand1, string operand2, char? @operator)
-        {
-            double number1 = double.Parse(operand1);
-            double number2 = double.Parse(operand2);
 
-            switch(@operator)
-            {
-                case '+':
-                   return $"{number1 + number2}";
 
-                case '-':
-                    return $"{number1 - number2}";
-
-                case 'x':
-                case 'X':
-                    return $"{number1 * number2}"; 
-                
-                case '/':
-                    if(number2 == 0)
-                        return Error;
-                    return $"{number1 / number2}";
-                
-                default:
-                    return "0";
-            }
-        }
-
+        /* Check given number is valid or not */
         private bool IsValidDigit(string number, char key)
         {
             if(number.Contains(".") && key == '.')  

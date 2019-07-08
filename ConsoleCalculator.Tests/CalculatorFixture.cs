@@ -105,18 +105,16 @@ namespace ConsoleCalculator.Tests
         [Fact]
         public void TestP()
         {
-            //-7+-6=-13
             calculator.SendKeyPress('7');
             calculator.SendKeyPress('+');
             calculator.SendKeyPress('4');
             calculator.SendKeyPress('s');
-            Assert.Equal("-11", calculator.SendKeyPress('='));
+            Assert.Equal("3", calculator.SendKeyPress('='));
         }
 
         [Fact]
         public void TestUnexpectedEnding()
         {
-            //-7+-6=-13
             calculator.SendKeyPress('7');
             calculator.SendKeyPress('+');
             calculator.SendKeyPress('4');
